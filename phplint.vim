@@ -1,13 +1,11 @@
-if exists("loadedPHPLint")
+" Check we actually have PHP installed, otherwise you'll never be able to save
+if exists("loadedPHPLint") || !executable('php')
     finish
 endif
 
 let loadedPHPLint = 1
 
-" Check we actually have PHP installed, otherwise you'll never be able to save
-if executable('php')
-    autocmd BufWriteCmd * execute('call LintPHPFile()')
-endif
+autocmd BufWriteCmd * execute('call LintPHPFile()')
 
 function LintPHPFile()
     if &filetype == 'php'
