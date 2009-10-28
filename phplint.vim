@@ -22,6 +22,7 @@ function LintPHPFile()
             if filereadable(testFile)
                 let phpLint = system('php -l ' . testFile)
                 let phpLint = substitute(phpLint, testFile, thisFile, "g")
+                call delete(testFile)
 
                 let errLine = matchstr(phpLint, 'No syntax errors')
                 if strlen(errLine) > 0
@@ -41,9 +42,18 @@ function LintPHPFile()
                     let cFile = tempname()
                     exe writefile(errorLines, cFile)
 
+                    let oldCpoptions = &cpoptions
+                    let oldErrorformat = &errorformat
+
+                    set cpoptions-=F
                     set errorformat=%m\ in\ %f\ on\ line\ %l
+
                     exe "cfile " . cFile
                     copen 5
+                    call delete(cFile)
+
+                    let &cpoptions = oldCpoptions
+                    let &errorformat = oldErrorformat
 
                     return
                 endif
