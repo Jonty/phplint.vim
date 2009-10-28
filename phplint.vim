@@ -22,17 +22,24 @@ function LintPHPFile()
             if filereadable(testFile)
                 let phpLint = system('php -l ' . testFile)
                 let phpLint = substitute(phpLint, testFile, thisFile, "g")
-                
+
                 let errLine = matchstr(phpLint, 'No syntax errors')
                 if strlen(errLine) > 0
                     cclose
                     redraw " Avoids the annoying 'Press ENTER to BLAH' message
                 else
                     let lintLines = split(phpLint, "\n")
-                    let lintLines = lintLines[0:-2] " The last line is garbage
+
+                    let errorLines = []
+                    for line in lintLines
+                        let pos = matchstr(line, 'on line')
+                        if strlen(pos) > 0 && stridx(line, 'PHP') != 0 " Some versions dupe the error
+                            call add(errorLines, line)
+                        endif
+                    endfor
 
                     let cFile = tempname()
-                    exe writefile(lintLines, cFile)
+                    exe writefile(errorLines, cFile)
 
                     set errorformat=%m\ in\ %f\ on\ line\ %l
                     exe "cfile " . cFile
