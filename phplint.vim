@@ -14,8 +14,12 @@ function LintPHPFile()
         " If the file isn't writable don't do anything, as it'll freak vim out
         if filewritable(thisFile)
             let testFile = tempname()
+
+            " This resets the view to the top, so we need to restore it
+            let view = winsaveview()
             let bufferContents = getbufline(bufnr("%"), 1, "$")
             exe writefile(bufferContents, testFile)
+            call winrestview(view)
 
             " Check the test file got written, this might fail if the disk is 
             " full and prevent you from saving. Which would be bad.
