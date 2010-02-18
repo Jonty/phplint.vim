@@ -85,4 +85,5 @@ function LintPHPFile()
         endif
     endif
 
+    return 1
 endf
