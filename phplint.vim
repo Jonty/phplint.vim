@@ -8,7 +8,7 @@ endif
 
 " To disable auto-lint, add "let noAutoLint = 1" to your .vimrc
 if !exists("noAutoLint")
-    autocmd BufWriteCmd * execute('call AutoLintPHPFile()')
+    autocmd BufWriteCmd *.php execute('call AutoLintPHPFile()')
 endif
 
 function AutoLintPHPFile()
