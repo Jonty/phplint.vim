@@ -58,7 +58,7 @@ function LintPHPFile()
                 let errorLines = []
                 for line in lintLines
                     let pos = matchstr(line, 'on line')
-                    if strlen(pos) > 0 && stridx(line, 'PHP') != 0 " Some versions dupe the error
+                    if strlen(pos) > 0
                         call add(errorLines, line)
                     endif
                 endfor
